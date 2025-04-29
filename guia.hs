@@ -84,9 +84,20 @@ sumarPrimero (x:xs)= sumarN x (x:xs)
 
 
 
+sumarUltimo::  [Integer] -> [Integer]
+sumarUltimo (x:xs) = sumarN (ultimo(x:xs) ) (x:xs)
 
 
 
-ordenar::[Integer] -> [Integer]
+
+
+
+pares::[Integer] -> [Integer]
+pares [] = []
+pares (x:xs)  | mod x 2 == 0 = (x: pares xs)
+              | otherwise = []
+
+
+ ordenar::[Integer] -> [Integer]
 ordenar [] = []
 ordenar a = ordenar( quitar (maximo a ) a)  ++ [maximo a]
