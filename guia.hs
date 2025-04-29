@@ -49,12 +49,13 @@ quitar elem [] = []
 quitar elem (x:xs) | elem == x = xs
                    | otherwise = (x: quitar elem xs)
 
-{--quitarTodos :: (Eq t) => t -> [t] ->[t]
-quitarTodos y [a] | y==a = []
-                  | otherwise = [a]
-quitarTodos y (x:xs) | y == x = quitar y xs
-                     | otherwise = y: quitarTodos y tail --}
- 
+
+quitarTodos::  (Eq t) => t -> [t] -> [t]
+quitarTodos elem [a] | (elem == a) = []
+                     | otherwise = [a]
+
+quitarTodos elem (x:xs) | (elem == x) = quitarTodos elem xs
+                        | otherwise = x : (quitarTodos elem xs)
 
 
 
