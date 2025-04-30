@@ -126,8 +126,52 @@ ordenar a = ordenar( quitar (maximo a ) a)  ++ [maximo a]
 
 --[4]
 
+
+--ejercicio 4
+
 -- 4.1
 sacarBlancosRepetidos :: [Char] -> [Char]
 sacarBlancosRepetidos [t] = [t]
 sacarBlancosRepetidos (x:xs) | (x == ' ') && (head xs == ' ') = sacarBlancosRepetidos xs
                              | otherwise = x : sacarBlancosRepetidos xs
+
+
+--4.2
+contarPalabras :: [Char]-> Integer
+contarPalabras [] = 0
+contarPalabras (x:xs) = 1 + contarPalabras(xs)
+
+
+--4.3
+
+--4.4
+
+
+--4.5
+--4.6
+
+
+--4.7
+
+
+--6
+
+type Texto = [Char]
+type Nombre = Texto
+type Telefono = Texto
+type Contacto = (Nombre, Telefono)
+type ContactosTel = [Contacto]
+
+enLosContactos ::Nombre ->ContactosTel ->Bool
+enLosContactos _ [] = False
+
+enLosContactos nombre ((contactoNombre, _): contactos) = nombre == contactoNombre || enLosContactos nombre contactos
+
+
+agregarContacto :: Contacto -> ContactosTel -> ContactosTel 
+agregarContacto unContacto [] = [unContacto]
+agregarContacto (nuevoNom,nuevoTel) ((contactoNombre,contactoTel):miagenda) | (nuevoNom ) == (contactoNombre) = ((contactoNombre,nuevoTel):miagenda)
+                                                     | otherwise = (contactoNombre,contactoTel) : (agregarContacto (nuevoNom,nuevoTel) miagenda)
+
+miagenda = [("vir","123"),("simon","1254125")]
+
