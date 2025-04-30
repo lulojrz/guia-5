@@ -22,7 +22,9 @@ sacarUltimo [t]= []
 sacarUltimo (x:xs) = x : sacarUltimo xs 
 
 
---ejercicio 2 
+
+--ejercicio 2
+
 
 
 pertenece::(Eq t) => t -> [t] -> Bool
@@ -58,6 +60,23 @@ quitarTodos elem (x:xs) | (elem == x) = quitarTodos elem xs
                         | otherwise = x : (quitarTodos elem xs)
 
 
+                        
+eliminarRepetidos :: (Eq t) => [t] -> [t]
+eliminarRepetidos [t] = [t]
+eliminarRepetidos [] = []
+eliminarRepetidos (x:xs) = x : eliminarRepetidos (quitarTodos x xs)
+
+
+mismosElementos :: (Eq t) => [t] -> [t] -> Bool
+mismosElementos lista_a lista_b = (contiene lista_a lista_b) && (contiene lista_b lista_a)
+
+contiene :: (Eq t) => [t] -> [t] -> Bool
+contiene [a] lista_b = pertenece a lista_b
+contiene lista_a lista_b = (pertenece (head (lista_a)) lista_b) &&  (contiene (tail lista_a) lista_b)
+
+capicua :: (Eq t) => [t] -> Bool
+capicua ls = (reverso ls == ls)
+
 
 --ejercicio 3
 sumatoria::[Integer] -> Integer
@@ -74,7 +93,6 @@ maximo[x] = x
 maximo (x:y:xs) | x>y  = maximo(x:xs)
                  | otherwise = maximo (y:xs)
 
-
 sumarN :: Integer ->[Integer] -> [Integer]
 sumarN n [t] = [n+t]
 sumarN n (x:xs) = x+n : sumarN n xs
@@ -90,14 +108,26 @@ sumarUltimo (x:xs) = sumarN (ultimo(x:xs) ) (x:xs)
 
 
 
+pares :: [Integer] -> [Integer]
+pares lista = multiplosDeN 2 lista
 
+multiplosDeN :: Integer -> [Integer] -> [Integer] -> [Integer]
+multiplosDeN n [t] | (mod t n == 0) = [t]
+                   | otherwise = []
 
-pares::[Integer] -> [Integer]
-pares [] = []
-pares (x:xs)  | mod x 2 == 0 = (x: pares xs)
-              | otherwise = []
+multiplosDeN n (x:xs) | (mod x n == 0) = x : multiplosDeN n xs
+                      | otherwise = multiplosDeN n xs
 
 
  ordenar::[Integer] -> [Integer]
 ordenar [] = []
 ordenar a = ordenar( quitar (maximo a ) a)  ++ [maximo a]
+
+
+--[4]
+
+-- 4.1
+sacarBlancosRepetidos :: [Char] -> [Char]
+sacarBlancosRepetidos [t] = [t]
+sacarBlancosRepetidos (x:xs) | (x == ' ') && (head xs == ' ') = sacarBlancosRepetidos xs
+                             | otherwise = x : sacarBlancosRepetidos xs
