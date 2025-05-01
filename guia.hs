@@ -93,7 +93,7 @@ maximo[x] = x
 maximo (x:y:xs) | x>y  = maximo(x:xs)
                  | otherwise = maximo (y:xs)
 
-sumarN :: Integer ->[Integer] -> [Integer]
+sumarN :: Num t => t ->[t] -> [t]
 sumarN n [t] = [n+t]
 sumarN n (x:xs) = x+n : sumarN n xs
 
@@ -111,23 +111,19 @@ sumarUltimo (x:xs) = sumarN (ultimo(x:xs) ) (x:xs)
 pares :: [Integer] -> [Integer]
 pares lista = multiplosDeN 2 lista
 
-multiplosDeN :: Integer -> [Integer] -> [Integer] -> [Integer]
-multiplosDeN n [t] | (mod t n == 0) = [t]
-                   | otherwise = []
+multiplosDeN :: Integer -> [Integer] -> [Integer]
+multiplosDeN _ [] = []  -- caso base necesario
+multiplosDeN n (x:xs)
+  | mod x n == 0 = x : multiplosDeN n xs
+  | otherwise    = multiplosDeN n xs
 
-multiplosDeN n (x:xs) | (mod x n == 0) = x : multiplosDeN n xs
-                      | otherwise = multiplosDeN n xs
 
-
- ordenar::[Integer] -> [Integer]
+ordenar::[Integer] -> [Integer]
 ordenar [] = []
 ordenar a = ordenar( quitar (maximo a ) a)  ++ [maximo a]
 
 
 --[4]
-
-
---ejercicio 4
 
 -- 4.1
 sacarBlancosRepetidos :: [Char] -> [Char]
@@ -143,19 +139,26 @@ contarPalabras (x:xs) = 1 + contarPalabras(xs)
 
 
 --4.3
+--no lo entendi
 
 --4.4
 
 
---4.5
+-- 4.5
+
 --4.6
 
 
---4.7
+--5
+sumaAcumulada::(Num t) => [t]-> [t]
+sumaAcumulada [t] = [t] 
+sumaAcumulada (x:xs) = x: sumarN x (sumaAcumulada xs) 
+
+lista = [1,2,3,4,5]
+
 
 
 --6
-
 type Texto = [Char]
 type Nombre = Texto
 type Telefono = Texto
@@ -173,5 +176,59 @@ agregarContacto unContacto [] = [unContacto]
 agregarContacto (nuevoNom,nuevoTel) ((contactoNombre,contactoTel):miagenda) | (nuevoNom ) == (contactoNombre) = ((contactoNombre,nuevoTel):miagenda)
                                                      | otherwise = (contactoNombre,contactoTel) : (agregarContacto (nuevoNom,nuevoTel) miagenda)
 
+
+eliminarContacto :: Nombre->ContactosTel->ContactosTel
+eliminarContacto _ [] = []
+eliminarContacto eliminado ((nombre,telefono) : miagenda) | eliminado == nombre = eliminarContacto eliminado miagenda
+                                                          | otherwise = (nombre,telefono) : eliminarContacto eliminado miagenda
+
+
 miagenda = [("vir","123"),("simon","1254125")]
 
+
+
+--7
+type Identificacion = Integer
+type Ubicacion = Texto
+type Estado = (Disponibilidad, Ubicacion)
+type Locker = (Identificacion, Estado)
+type MapaDeLockers = [Locker]
+type Disponibilidad = Bool
+
+lockers =
+ [
+ (100,(False,"ZD39I")),
+ (101,(True,"JAH3I")),
+ (103,(True,"IQSA9")),
+ (105,(True,"QOTSA")),
+ (109,(False,"893JJ")),
+ (110,(False,"99292"))
+ ]
+
+
+
+ --7.1
+existeElLocker:: Identificacion->MapaDeLockers->Bool
+existeElLocker _ [] = False
+existeElLocker codigo ((num,_):xs) = codigo == num || existeElLocker codigo xs
+
+
+--7.2
+ubicacionDelLocker :: Identificacion->MapaDeLockers->Ubicacion
+ubicacionDelLocker _ [] = " "
+
+ubicacionDelLocker codigo ((num,(_,ubi)):xs) | codigo == num = ubi
+                                             | otherwise = ubicacionDelLocker codigo xs
+
+
+--7.3
+estaDisponibleElLocker :: Identificacion->MapaDeLockers->Bool
+estaDisponibleElLocker _ [] = False
+estaDisponibleElLocker codigo ((num,(bool,_)) :xs) | codigo==num = bool
+                                                   | otherwise = estaDisponibleElLocker codigo xs
+
+--7.4
+ocuparLocker :: Identificacion->MapaDeLockers->MapaDeLockers
+ocuparLocker _ [] = []
+ocuparLocker codigo ((num,(bool,id)):xs) | bool == False = ((num,(True,id)):xs)
+                                         | otherwise =  (num,(bool,id)) : ocuparLocker codigo xs                  
