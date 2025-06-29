@@ -1,72 +1,73 @@
+module GUIA where
 --ejercicio 1
-longitud :: [t] -> Integer
+--1
+longitud :: [t]-> Integer
 longitud [] = 0
-longitud (_:xs) = 1 + longitud xs
-
-ultimo :: [t] -> t
+longitud(x:xs) = 1 + longitud(xs)
+--2
+ultimo :: [t]-> t 
 ultimo [x] = x
-ultimo (x:xs) = ultimo( xs)
+ultimo (x:xs) = ultimo(xs)
+--3
+--devuelve toda la lista menos el ultimo
+principio :: [t]-> [t]
+principio [t] = []
+principio(x:xs) = x:principio xs
 
 
-principio :: [t] -> [t]
-principio[t] = []
-principio(x:xs) = x: principio xs
-
-
-reverso::[t] -> [t]
-reverso [t] = [t]
-reverso t = ultimo t : reverso(principio t)
-
-sacarUltimo :: [t] -> [t]
-sacarUltimo [t]= [] 
-sacarUltimo (x:xs) = x : sacarUltimo xs 
+--4
+reverso :: [t]-> [t] 
+reverso [x] = [x]
+reverso(x:xs) = ultimo xs : reverso(principio (x:xs))
 
 
 
---ejercicio 2
+--ejercicio 2.1
+pertenece :: (Eq t) => t-> [t]-> Bool
+pertenece _ [] = False
+pertenece num  (x:xs)| num == x = True
+                     | otherwise = pertenece num xs
+
+--2.2
+todosIguales :: (Eq t) => [t]-> Bool
+todosIguales [x] = True
+todosIguales (x:y:xs)| x== y = todosIguales(y:xs)
+                     | otherwise = False
+
+--2.3
+todosDistintos :: (Eq t) => [t]-> Bool
+todosDistintos [x] = False
+todosDistintos(x:y:xs)| x==y = todosDistintos (y:xs)
+                      | otherwise = True 
+ 
+--2.4
+hayRepetidos :: (Eq t) => [t]-> Bool
+hayRepetidos [x] = False
+hayRepetidos(x:y:xs)| x== y = True
+                    | otherwise = hayRepetidos(y:xs)
+
+--2.5
+quitarNumero:: (Eq t) => t-> [t]-> [t]
+quitarNumero _ [] = []
+quitarNumero num (x:xs) | x== num = xs
+                        | otherwise = x: quitarNumero num (xs)
+
+
+--2.6
+quitarTodos :: (Eq t) => t-> [t]-> [t]
+quitarTodos _ [] = []
+quitarTodos num (x:xs)| x==num = quitarTodos num (xs)
+                      | otherwise = x:quitarTodos num (xs)
 
 
 
-pertenece::(Eq t) => t -> [t] -> Bool
-pertenece t [a] = (t==a)
-pertenece t (x:xs) | t== x = True
-                   | otherwise = pertenece t xs
-                                  
-todosIguales :: (Eq t) => [t] -> Bool
-todosIguales [a,b] = a == b
-todosIguales (x:xs) = (x== head(xs)) && (todosIguales xs)
-
-todosDistintos::(Eq t) => [t] -> Bool
-todosDistintos [a,b] = a/=b 
-todosDistintos (x:xs) = (x /= head(xs)) && (todosDistintos xs)
-
-
-hayRepetidos :: (Eq t ) => [t] -> Bool
-hayRepetidos [a,b] = a==b
-hayRepetidos (x:xs ) = (x== head xs ) || (hayRepetidos xs)
-
-
-quitar:: (Eq t ) => t -> [t] -> [t]
-quitar elem [] = []
-quitar elem (x:xs) | elem == x = xs
-                   | otherwise = (x: quitar elem xs)
-
-
-quitarTodos::  (Eq t) => t -> [t] -> [t]
-quitarTodos elem [a] | (elem == a) = []
-                     | otherwise = [a]
-
-quitarTodos elem (x:xs) | (elem == x) = quitarTodos elem xs
-                        | otherwise = x : (quitarTodos elem xs)
-
-
-                        
+--2.7
 eliminarRepetidos :: (Eq t) => [t] -> [t]
 eliminarRepetidos [t] = [t]
 eliminarRepetidos [] = []
 eliminarRepetidos (x:xs) = x : eliminarRepetidos (quitarTodos x xs)
 
-
+--2.8
 mismosElementos :: (Eq t) => [t] -> [t] -> Bool
 mismosElementos lista_a lista_b = (contiene lista_a lista_b) && (contiene lista_b lista_a)
 
@@ -74,79 +75,68 @@ contiene :: (Eq t) => [t] -> [t] -> Bool
 contiene [a] lista_b = pertenece a lista_b
 contiene lista_a lista_b = (pertenece (head (lista_a)) lista_b) &&  (contiene (tail lista_a) lista_b)
 
-capicua :: (Eq t) => [t] -> Bool
-capicua ls = (reverso ls == ls)
-
-
---ejercicio 3
-sumatoria::[Integer] -> Integer
-sumatoria [] = 0  
-sumatoria (x:xs) =  x + sumatoria (xs)
-
-productoria :: [Integer] -> Integer
-productoria [] = 1
-productoria (x:xs) = x* productoria xs
-
-
-maximo:: [Integer] -> Integer
-maximo[x] = x
-maximo (x:y:xs) | x>y  = maximo(x:xs)
-                 | otherwise = maximo (y:xs)
-
-sumarN :: Num t => t ->[t] -> [t]
-sumarN n [t] = [n+t]
-sumarN n (x:xs) = x+n : sumarN n xs
-
-sumarPrimero :: [Integer] -> [Integer]
-sumarPrimero (x:xs)= sumarN x (x:xs)   
+--2.9
+capicua :: (Eq t) => [t]-> Bool 
+capicua x = reverso x == x
 
 
 
-sumarUltimo::  [Integer] -> [Integer]
-sumarUltimo (x:xs) = sumarN (ultimo(x:xs) ) (x:xs)
+--3
+
+sumatoria::[Integer]->Integer
+sumatoria[]=0
+sumatoria (x:xs) = x+sumatoria(xs)
+
+productoria :: [Integer]-> Integer
+productoria[]=1
+productoria (x:xs) = x*productoria(xs) 
+
+
+maximo :: [Integer]-> Integer 
+maximo[x]=x
+maximo(x:y:xs)|  x> y = maximo(x:xs)
+              | otherwise = maximo(y:xs)
 
 
 
+sumarN :: Integer-> [Integer]-> [Integer]
+sumarN n [] = []
+sumarN num (x:xs) = x+num : sumarN num xs
 
-pares :: [Integer] -> [Integer]
-pares lista = multiplosDeN 2 lista
+sumarElPrimero :: [Integer]-> [Integer]
+sumarElPrimero [] = []
+sumarElPrimero (x:xs) = sumarN x (x:xs)
 
-multiplosDeN :: Integer -> [Integer] -> [Integer]
-multiplosDeN _ [] = []  -- caso base necesario
-multiplosDeN n (x:xs)
-  | mod x n == 0 = x : multiplosDeN n xs
-  | otherwise    = multiplosDeN n xs
+
+sumarElUltimo :: [Integer]-> [Integer]
+sumarElUltimo [] = []
+sumarElUltimo (x:xs) = sumarN (ultimo(x:xs))  (x:xs)
+
+
+pares :: [Integer]-> [Integer] 
+pares [] = []
+pares (x:xs)| mod x 2 == 0 = x:pares(xs)
+            | otherwise = pares(xs)
+
+
+multiplosDeN :: Integer-> [Integer]-> [Integer]
+multiplosDeN _ [] = []
+multiplosDeN num (x:xs)| mod x num == 0 = x:multiplosDeN num xs 
+                       | otherwise = multiplosDeN num xs
 
 
 ordenar::[Integer] -> [Integer]
 ordenar [] = []
-ordenar a = ordenar( quitar (maximo a ) a)  ++ [maximo a]
+ordenar (x:xs) = minimo (x:xs) : ordenar(quitarNumero (minimo(x:xs)) (x:xs))
 
 
---[4]
-
--- 4.1
-sacarBlancosRepetidos :: [Char] -> [Char]
-sacarBlancosRepetidos [t] = [t]
-sacarBlancosRepetidos (x:xs) | (x == ' ') && (head xs == ' ') = sacarBlancosRepetidos xs
-                             | otherwise = x : sacarBlancosRepetidos xs
+minimo :: [Integer]-> Integer 
+minimo[x]=x
+minimo(x:y:xs)|  y> x = minimo(x:xs)
+              | otherwise = minimo(y:xs)
 
 
---4.2
-contarPalabras :: [Char]-> Integer
-contarPalabras [] = 0
-contarPalabras (x:xs) = 1 + contarPalabras(xs)
 
-
---4.3
---no lo entendi
-
---4.4
-
-
--- 4.5
-
---4.6
 
 
 --5
